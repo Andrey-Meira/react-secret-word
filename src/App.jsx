@@ -11,10 +11,14 @@ const stages = [
 ];
 
 function App() {
+  const guessesQnty = 3;
+
   const [gameStage, setGameStage] = useState(stages[0].id);
   const [word, setPickedWord] = useState();
   const [category, setPickedCategory] = useState();
   const [letters, setLetters] = useState();
+  const [guesses, setGuesses] = useState(guessesQnty);
+  const [score, setScore] = useState(0);
 
   return (
     <div className="main_content">
@@ -31,10 +35,22 @@ function App() {
           word={word}
           category={category}
           letters={letters}
+          score={score}
+          guesses={guesses}
           setGameStage={setGameStage}
+          setScore={setScore}
+          setGuesses={setGuesses}
         />
       )}
-      {gameStage === 3 && <GameOver setGameStage={setGameStage} />}
+      {gameStage === 3 && (
+        <GameOver
+          guessesQnty={guessesQnty}
+          score={score}
+          setGameStage={setGameStage}
+          setScore={setScore}
+          setGuesses={setGuesses}
+        />
+      )}
     </div>
   );
 }
