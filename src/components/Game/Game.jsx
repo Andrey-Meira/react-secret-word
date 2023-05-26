@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Game.module.css";
+import StartScreen from "../StartScreen/StartScreen";
 
 const Game = ({
   word,
@@ -7,6 +8,7 @@ const Game = ({
   guesses,
   category,
   letters,
+  startGame,
   setGameStage,
   setScore,
   setGuesses,
@@ -37,7 +39,6 @@ const Game = ({
         ...actualLetters,
         normalizedLetter,
       ]);
-      setScore((actualScore) => actualScore + 100);
     } else {
       setWrongLetters((actualWrongLetters) => [
         ...actualWrongLetters,
@@ -61,10 +62,12 @@ const Game = ({
     const uniqueLetters = [...new Set(letters)];
 
     if (uniqueLetters.length === guessedLetters.length) {
-
+      setScore((actualScore) => actualScore += 100);
+      clearLetterStates();
+      startGame();
     }
 
-  }, [guessedLetters]);
+  }, [guessedLetters, letters, startGame]);
 
   const clearLetterStates = () => {
     setGuessedLetters([]);

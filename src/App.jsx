@@ -3,6 +3,7 @@ import { useState } from "react";
 import Game from "./components/Game/Game";
 import GameOver from "./components/GameOver/GameOver";
 import StartScreen from "./components/StartScreen/StartScreen";
+import { wordsList } from "./data/words";
 
 const stages = [
   { id: 1, name: "Start" },
@@ -13,6 +14,9 @@ const stages = [
 function App() {
   const guessesQnty = 3;
 
+  const [words] = useState(wordsList);
+  const categories = Object.keys(words);
+
   const [gameStage, setGameStage] = useState(stages[0].id);
   const [word, setPickedWord] = useState();
   const [category, setPickedCategory] = useState();
@@ -20,14 +24,29 @@ function App() {
   const [guesses, setGuesses] = useState(guessesQnty);
   const [score, setScore] = useState(0);
 
+  const startGame = () => {
+    let { word, category } = pickRandomWordAndCategory();
+    word = word.toLowerCase();
+    setPickedCategory(category);
+    setPickedWord(word);
+    setLetters(word.split(""));
+    setGameStage(2);
+  };
+
+  const pickRandomWordAndCategory = () => {
+    const category =
+      categories[Math.floor(Math.random() * Object.keys(categories).length)];
+    const word =
+      words[category][Math.floor(Math.random() * words[category].length)];
+
+    return { word, category };
+  };
+
   return (
     <div className="main_content">
       {gameStage === 1 && (
         <StartScreen
-          setPickedWord={setPickedWord}
-          setPickedCategory={setPickedCategory}
-          setLetters={setLetters}
-          setGameStage={setGameStage}
+          startGame={startGame}
         />
       )}
       {gameStage === 2 && (
@@ -37,6 +56,7 @@ function App() {
           letters={letters}
           score={score}
           guesses={guesses}
+          startGame={startGame}
           setGameStage={setGameStage}
           setScore={setScore}
           setGuesses={setGuesses}
